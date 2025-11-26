@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: apps
+  namespace: argocd
+spec:
+  generators:
+  - matrix:
+      generators:
+      - list:
+          elements:
+          - env: dev
+            server: https://f25bc297-5013-4b35-9aa9-9298c2d8b934.k8s.ondigitalocean.com
+          - env: uat
+            server: https://YOUR-UAT-CLUSTER-URL.k8s.ondigitalocean.com
+          - env: prd
+            server: https://YOUR-PRD-CLUSTER-URL.k8s.ondigitalocean.com
+      - git:
+          repoURL: https://github.com/shariqmus/my-apps-repo.git
+          revision: HEAD
+          directories:
+          - path: apps/{{env}}/*
+  template:
+    metadata:
+      name: '{{path.basename}}-{{env}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/shariqmus/my-apps-repo.git
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{path.basename}}-{{env}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+

@@ -24,7 +24,7 @@ spec:
     metadata:
       name: '{{path.basename}}-{{env}}'
     spec:
-      project: default
+      project: '{{env}}'
       source:
         repoURL: https://github.com/shariqmus/my-apps-repo.git
         targetRevision: HEAD

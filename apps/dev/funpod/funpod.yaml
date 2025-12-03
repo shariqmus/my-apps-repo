@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: funpod
-          image: shariqmus/funpod:6441992
+          image: shariqmus/funpod:1e99ab4
           ports:
             - containerPort: 80
           resources:
@@ -69,7 +69,7 @@ spec:
     - name: shared-gateway
       namespace: gateway-system
   hostnames:
-    - "funpod.dev.example.com"
+    - "funpod.platformhub.space"
   rules:
     - matches:
         - path:

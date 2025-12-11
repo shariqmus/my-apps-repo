@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: funpod
-          image: shariqmus/funpod:66e6dd1
+          image: shariqmus/funpod:254d418
           ports:
             - containerPort: 5000
           resources:
@@ -66,7 +66,7 @@ metadata:
     external-dns.alpha.kubernetes.io/ttl: "120"
 spec:
   parentRefs:
-    - name: shared-gateway
+    - name: external-gateway
       namespace: gateway-system
   hostnames:
     - "funpod.platformhub.space"

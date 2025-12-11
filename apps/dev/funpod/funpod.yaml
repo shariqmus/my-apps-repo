@@ -16,8 +16,8 @@ spec:
     app: funpod
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 5000
+      targetPort: 5000
   type: ClusterIP
 ---
 # Source: my-app-chart/templates/deployment.yaml
@@ -38,9 +38,9 @@ spec:
     spec:
       containers:
         - name: funpod
-          image: shariqmus/funpod:f9efdae
+          image: shariqmus/funpod:66e6dd1
           ports:
-            - containerPort: 80
+            - containerPort: 5000
           resources:
             limits:
               cpu: 500m
@@ -77,5 +77,5 @@ spec:
             value: "/"
       backendRefs:
         - name: funpod
-          port: 80
+          port: 5000
           weight: 1

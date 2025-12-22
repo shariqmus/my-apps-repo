@@ -10,7 +10,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: funpod
-  namespace: funpod-dev
+  namespace: funpod
 spec:
   selector:
     app: funpod
@@ -25,7 +25,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: funpod
-  namespace: funpod-dev
+  namespace: funpod
 spec:
   replicas: 1
   selector:
@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: funpod
-          image: shariqmus/funpod:9fbaa77
+          image: shariqmus/funpod:d1e33c7
           ports:
             - containerPort: 5000
           resources:
@@ -49,15 +49,13 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
-            - name: ENV
-              value: dev
 ---
 # Source: my-app-chart/templates/httproute.yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: funpod-httproute
-  namespace: funpod-dev
+  namespace: funpod
   labels:
     app: funpod
   annotations:
@@ -79,3 +77,18 @@ spec:
         - name: funpod
           port: 5000
           weight: 1
+---
+# Source: my-app-chart/templates/vaultstaticsecret.yaml
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: funpod-secret
+  namespace: funpod
+spec:
+  vaultAuthRef: vault-auth
+  mount: kv
+  type: kv-v2
+  path: dev/apps/funpod
+  destination:
+    name: funpod
+    create: true

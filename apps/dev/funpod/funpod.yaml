@@ -77,7 +77,6 @@ spec:
       app.kubernetes.io/instance: funpod
   template:
     metadata:
-      annotations:
       labels:
         app: funpod
         app.kubernetes.io/name: funpod
@@ -109,8 +108,6 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-          envFrom:
-          volumeMounts:
 ---
 # Source: my-app-chart/templates/httproute.yaml
 apiVersion: gateway.networking.k8s.io/v1

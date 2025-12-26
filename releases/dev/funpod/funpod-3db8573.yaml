@@ -1,0 +1,17 @@
+apiVersion: platformhub.io/v1
+kind: Release
+metadata:
+  name: funpod-3db8573
+spec:
+  app: funpod
+  environment: dev
+  image:
+    repository: shariqmus/funpod
+    tag: 3db8573
+  chart:
+    repo: shariqmus/my-app-chart
+    path: my-app-chart
+  source:
+    commit: 3db8573
+    workflow: Build and Deploy via ArgoCD
+  renderedAt: 2025-12-26T06:10:38Z

@@ -3,17 +3,44 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: funpod-dev
+  name: funpod
+---
+# Source: my-app-chart/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: funpod-sa
+  namespace: funpod
+  labels:
+    app: funpod
+    app.kubernetes.io/environment: dev
+    app.kubernetes.io/instance: funpod
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: funpod
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: 1.0.0
+    cost-center: cc-123
 ---
 # Source: my-app-chart/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: funpod
-  namespace: funpod-dev
+  namespace: funpod
+  labels:
+    app: funpod
+    app.kubernetes.io/environment: dev
+    app.kubernetes.io/instance: funpod
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: funpod
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: 1.0.0
+    cost-center: cc-123
 spec:
   selector:
     app: funpod
+    app.kubernetes.io/name: funpod
+    app.kubernetes.io/instance: funpod
   ports:
     - protocol: TCP
       port: 5000
@@ -25,22 +52,56 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: funpod
-  namespace: funpod-dev
+  namespace: funpod
+  labels:
+    app: funpod
+    app.kubernetes.io/environment: dev
+    app.kubernetes.io/instance: funpod
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: funpod
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: 1.0.0
+    cost-center: cc-123
 spec:
   replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app: funpod
+      app.kubernetes.io/name: funpod
+      app.kubernetes.io/instance: funpod
   template:
     metadata:
+      annotations:
       labels:
         app: funpod
+        app.kubernetes.io/name: funpod
+        app.kubernetes.io/instance: funpod
     spec:
+      
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+      serviceAccountName: funpod-sa
       containers:
-        - name: funpod
-          image: shariqmus/funpod:77ea482
+        - name: app
+          image: ci:ci
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
+              protocol: TCP
+          
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: 500m
@@ -48,18 +109,25 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-          env:
+          envFrom:
+          volumeMounts:
 ---
 # Source: my-app-chart/templates/httproute.yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: funpod-httproute
-  namespace: funpod-dev
+  namespace: funpod
   labels:
     app: funpod
+    app.kubernetes.io/environment: dev
+    app.kubernetes.io/instance: funpod
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: funpod
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: 1.0.0
+    cost-center: cc-123
   annotations:
-    # External-DNS annotations for Cloudflare
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
     external-dns.alpha.kubernetes.io/ttl: "120"
 spec:
@@ -83,12 +151,21 @@ apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret
 metadata:
   name: funpod-secret
-  namespace: funpod-dev
+  namespace: funpod
+  labels:
+    app: funpod
+    app.kubernetes.io/environment: dev
+    app.kubernetes.io/instance: funpod
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: funpod
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: 1.0.0
+    cost-center: cc-123
 spec:
   vaultAuthRef: vault-auth
   mount: kv
   type: kv-v2
   path: dev/apps/funpod
   destination:
-    name: funpod
+    name: funpod-secret
     create: true

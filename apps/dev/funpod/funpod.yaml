@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: funpod
-          image: shariqmus/funpod:2ae5c77
+          image: shariqmus/funpod:77ea482
           ports:
             - containerPort: 5000
           resources:

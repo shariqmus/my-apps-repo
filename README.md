@@ -6,6 +6,7 @@ This repository contains ArgoCD application definitions and configurations.
 
 - `apps/` - Application manifests organized by environment (dev, uat, prd)
 - `argocd/` - ArgoCD application definitions organized by environment (dev, uat, prd)
+- `releases/` - Auto-populated with release manifests for each new deployment
 
 ## Environments
 

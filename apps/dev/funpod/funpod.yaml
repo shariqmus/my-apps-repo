@@ -93,7 +93,6 @@ spec:
           ports:
             - containerPort: 5000
               protocol: TCP
-          
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

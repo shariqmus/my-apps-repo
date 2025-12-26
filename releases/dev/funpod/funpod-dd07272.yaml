@@ -1,0 +1,17 @@
+apiVersion: platformhub.io/v1
+kind: Release
+metadata:
+  name: funpod-dd07272
+spec:
+  app: funpod
+  environment: dev
+  image:
+    repository: shariqmus/funpod
+    tag: dd07272
+  chart:
+    repo: shariqmus/my-app-chart
+    path: my-app-chart
+  source:
+    commit: dd07272
+    workflow: Build and Deploy via ArgoCD
+  renderedAt: 2025-12-26T06:30:14Z

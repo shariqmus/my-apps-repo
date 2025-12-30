@@ -1,0 +1,17 @@
+apiVersion: platformhub.io/v1
+kind: Release
+metadata:
+  name: funpod-f3880a4
+spec:
+  app: funpod
+  environment: dev
+  image:
+    repository: shariqmus/funpod
+    tag: f3880a4
+  chart:
+    repo: shariqmus/my-app-chart
+    path: my-app-chart
+  source:
+    commit: f3880a4
+    workflow: Build and Deploy via ArgoCD
+  renderedAt: 2025-12-30T11:35:06Z
